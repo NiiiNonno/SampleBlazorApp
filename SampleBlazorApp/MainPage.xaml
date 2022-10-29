@@ -5,10 +5,24 @@
              x:Class="SampleBlazorApp.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <BlazorWebView HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
-        </BlazorWebView.RootComponents>
-    </BlazorWebView>
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="18" />
+        </Grid.RowDefinitions>
+
+        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End">
+            
+        </HorizontalStackLayout>
+        <local:BeadsView x:Name="beadsView_main" Grid.Row="1" HorizontalOptions="End" Add="BeadsView_Add">
+            
+        </local:BeadsView>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="End">
+            
+        </HorizontalStackLayout>
+
+    </Grid>
 
 </ContentPage>
