@@ -5,10 +5,35 @@
              x:Class="SampleBlazorApp.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <BlazorWebView HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
-        </BlazorWebView.RootComponents>
-    </BlazorWebView>
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="26" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="26" />
+        </Grid.RowDefinitions>
+
+        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End">
+            <Button Text="+色見本" Command="{Binding AddCommand}" CommandParameter="色見本">
+                
+            </Button>
+            <Button Text="+項目" Command="{Binding AddCommand}" CommandParameter="項目">
+                
+            </Button>
+        </HorizontalStackLayout>
+        <local:BeadsView x:Name="beadsView_main" Grid.Row="1" HorizontalOptions="End">
+            
+        </local:BeadsView>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="End">
+            <Button Text="終了" Command="{Binding ExitCommand}">
+                
+            </Button>
+        </HorizontalStackLayout>
+
+    </Grid>
 
 </ContentPage>
