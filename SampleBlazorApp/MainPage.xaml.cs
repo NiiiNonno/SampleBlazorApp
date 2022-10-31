@@ -1,85 +1,109 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Microsoft.AspNetCore.Components.WebView.Maui;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Compatibility;
 using Microsoft.Maui.Controls.Shapes;
+using Nonno.Assets.Collections;
 using Grid = Microsoft.Maui.Controls.Grid;
 
 namespace SampleBlazorApp;
 
 public partial class MainPage : ContentPage
 {
-    ColorTheme Theme { get; set; }
+    public static BeadsView BEADS;
 
 	public MainPage()
 	{
 		InitializeComponent();
+
+        BEADS = beadsView_main;
 	}
+}
 
-	private async void BeadsView_Add(object sender, EventArgs e)
-	{
-        string action = await DisplayActionSheet("追加", "取消", null, "色見本", "文書", "項目");
+public class MainPageViewModel : INotifyPropertyChanged
+{
+    ColorTheme Theme { get; set; }
+    public ICommand ExitCommand { get; set; }
+    public ICommand AddCommand { get; set; }
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        switch (action)
-        {
-        case "色見本":
+    public MainPageViewModel()
+    {
+        ExitCommand = new Command(() => Environment.Exit(0), () => true);
+        AddCommand = new Command<string>(key => { switch (key)
             {
-                for (int i = 0; i < BAMBOO_COLORS.Length; i++)
+            case "色見本":
                 {
-                    beadsView_main.Beads.Add(new Rectangle
+                    for (int i = 0; i < BAMBOO_COLORS.Length; i++)
                     {
-                        WidthRequest = 100,
-                        MinimumHeightRequest = 1,
-                        Fill = new SolidColorBrush(GetBambooColor(new(i, 0, 0, 0))),
-                    });
-                }
-
-                break;
-            }
-        default:
-            {
-                var grid = new Grid
-                {
-                    BackgroundColor = GetBambooColor(TimeSpan.Zero),
-                    RowDefinitions =
-                    {
-                        new RowDefinition(new GridLength(18)),
-                        new RowDefinition(GridLength.Star),
-                        new RowDefinition(new GridLength(18)),
-                    },
-                    ColumnDefinitions =
-                    {
-                        new ColumnDefinition(GridLength.Star),
+                        MainPage.BEADS.Beads.Add(new Rectangle
+                        {
+                            Margin = new Thickness(3, 0, 3, 0),
+                            WidthRequest = 100,
+                            MinimumHeightRequest = 1,
+                            Fill = new SolidColorBrush(GetBambooColor(new(i, 0, 0, 0))),
+                        });
                     }
-                };
-                grid.Add(new Label
+
+                    break;
+                }
+            default:
                 {
-                    Text = "BlazorWebView",
-                    HorizontalOptions = LayoutOptions.Fill,
-                    VerticalOptions = LayoutOptions.Start,
-                    HeightRequest = 18,
-                }, 0, 0);
-                grid.Add(new BlazorWebView
-                {
-                    MinimumWidthRequest = 400,
-                    HorizontalOptions = LayoutOptions.Fill,
-                    VerticalOptions = LayoutOptions.Fill,
-                    HostPage = "wwwroot/index.html",
-                    RootComponents =
+                    var grid = new Grid
+                    {
+                        BackgroundColor = GetBambooColor(TimeSpan.Zero),
+                        RowDefinitions =
+                    {
+                        new RowDefinition(new GridLength(40)),
+                        new RowDefinition(GridLength.Star),
+                        new RowDefinition(new GridLength(40)),
+                    },
+                        ColumnDefinitions =
+                    {
+                        new ColumnDefinition(new GridLength(40)),
+                        new ColumnDefinition(GridLength.Star),
+                        new ColumnDefinition(new GridLength(40)),
+                    }
+                    };
+
+                    var sWVM = new ScrollWebViewMenu(grid);
+
+                    var bWV = new BlazorWebView
+                    {
+                        MinimumWidthRequest = 400,
+                        HorizontalOptions = LayoutOptions.Fill,
+                        VerticalOptions = LayoutOptions.Fill,
+                        HostPage = "wwwroot/index.html",
+                        RootComponents =
                     {
                         new RootComponent
                         {
                             Selector = "#app",
-                            ComponentType = typeof(Main)
+                            ComponentType = typeof(Pages.Component1),
+                            Parameters = new CompactDictionary<string, object>
+                            {
+                                { IWebViewMenu.PARAMETER_NAME, sWVM }
+                            }
                         }
                     },
-                }, 0, 1);
+                    };
 
-                beadsView_main.Beads.Add(grid);
+                    Grid.SetRow(bWV, 1);
+                    Grid.SetColumnSpan(bWV, 3);
+                    grid.Add(bWV);
 
-                break;
-            }
-        }
+                    MainPage.BEADS.Beads.Add(grid);
+
+                    break;
+                }
+            } });
     }
+
+    public void OnPropertyChanged([CallerMemberName] string name = "") =>
+    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
     static readonly Nonno.Assets.Graphics.Color[] BAMBOO_COLORS = new Nonno.Assets.Graphics.Color[]
     {
@@ -97,7 +121,6 @@ public partial class MainPage : ContentPage
         new(82, 61, 46),
         new(46, 32, 24),
     };
-
     Color GetBambooColor(TimeSpan timeSpan)
     {
         double days = timeSpan.TotalHours / 24.0;
@@ -120,4 +143,13 @@ public partial class MainPage : ContentPage
 
         static Color Cast(Nonno.Assets.Graphics.Color color) => new(color.Red, color.Green, color.Blue);
     }
+}
+
+public class ControlMenu
+{
+    public event EventHandler Deleted;
+    public event EventHandler Event;
+
+    public void Delete() => Deleted?.Invoke(this, EventArgs.Empty);
+    public void Invoke(object sender, EventArgs e) => Event?.Invoke(this, EventArgs.Empty);
 }

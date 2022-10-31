@@ -17,10 +17,12 @@
             </Style>
 
             <Style TargetType="Button">
+                <Setter Property="Padding" Value="2, 0, 2, 0"/>
+                <Setter Property="Margin" Value="0, 0, 0, 0"/>
+                <Setter Property="CornerRadius" Value="0"/>
                 <Setter Property="TextColor" Value="{DynamicResource AccentTextColor}" />
                 <Setter Property="FontFamily" Value="OpenSansRegular" />
                 <Setter Property="BackgroundColor" Value="{DynamicResource AccentBackgroundColor}" />
-                <Setter Property="Padding" Value="14,10" />
             </Style>
 
         </ResourceDictionary>

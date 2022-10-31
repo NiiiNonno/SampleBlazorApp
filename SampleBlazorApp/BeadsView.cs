@@ -18,13 +18,12 @@ public class BeadsView : ContentView
 
 	public IBoundCollection<IView> Beads => _beads;
 	public ColorTheme Theme { get; set; }
-	public event EventHandler Add;
 
     public BeadsView()
 	{
 		var content = new HorizontalStackLayout
 		{
-			Margin = new Thickness(50, 0, 50, 0),
+			Padding = Thickness.Zero,
 		};
 
 		var panGestureRecognizer = new PanGestureRecognizer
@@ -38,15 +37,6 @@ public class BeadsView : ContentView
 		beads.ItemRemoved += BeadRemoved;
 		beads.ItemReplaced += BeadReplaced;
 
-        var addB = new Button 
-		{ 
-			BackgroundColor = new Color(171, 66, 17), 
-			WidthRequest = 50,
-			VerticalOptions = LayoutOptions.Fill,
-			Text = "+"
-		};
-		addB.Clicked += OnAdd;
-
         _content = content;
 		_panGR = panGestureRecognizer;
 		_beads = beads;
@@ -56,8 +46,6 @@ public class BeadsView : ContentView
 		VerticalOptions = LayoutOptions.Fill;
 		Content = _content;
 		GestureRecognizers.Add(panGestureRecognizer);
-
-		Beads.Add(addB);
 	}
 
 	private void PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -81,25 +69,39 @@ public class BeadsView : ContentView
 		}
 	}
 
-	private void OnAdd(object sender, EventArgs e) => Add?.Invoke(sender, e);
-
 	private void BeadAdded(object sender, IBoundList<IView>.ItemAddedEventArgs e)
 	{
-		if (_content.Children.Count == 0) _content.Children.Add(e.Neo);
-		else _content.Children.Insert(1, e.Neo);
-	}
+		_content.Children.Insert(0, e.Neo);
+		var d = -e.Neo.Width;
+        if (!double.IsNaN(d))
+		{
+			_x += d;
+			TranslationX += d;
+		}
+    }
 
 	private void BeadRemoved(object sender, IBoundList<IView>.ItemRemovedEventArgs e)
 	{
-		_content.Children.Remove(e.Old);
-	}
+        _content.Children.Remove(e.Old);
+        var d = e.Old.Width;
+        if (!double.IsNaN(d))
+        {
+            _x += d;
+            TranslationX += d;
+        }
+    }
 
-	private void BeadReplaced(object sender, IBoundList<IView>.ItemReplacedEventArgs e)
+    private void BeadReplaced(object sender, IBoundList<IView>.ItemReplacedEventArgs e)
 	{
-		_content.Children.Remove(e.Old);
-		if (_content.Children.Count == 0) _content.Children.Add(e.Neo);
-		else _content.Children.Insert(1, e.Neo);
-	}
+        _content.Children.Remove(e.Old);
+		_content.Children.Insert(0, e.Neo);
+        var d = e.Old.Width-e.Neo.Width;
+        if (!double.IsNaN(d))
+        {
+            _x += d;
+            TranslationX += d;
+        }
+    }
 }
 
 public enum ColorTheme
