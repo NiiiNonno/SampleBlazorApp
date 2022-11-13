@@ -87,7 +87,7 @@ public class BoundList<T> : IBoundList<T>
     {
         if (_list.TryAdd(item))
         {
-            ItemAdded?.Invoke(this, new(Count - 1, item));
+            ItemAdded?.Invoke(this, new(Count, item));
             return true;
         }
         else

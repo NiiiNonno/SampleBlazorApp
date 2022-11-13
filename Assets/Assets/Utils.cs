@@ -19,6 +19,7 @@ using Double = System.Double;
 using System.Runtime.CompilerServices;
 using System.Buffers.Binary;
 using Nonno.Assets.Scrolls;
+using Nonno.Assets.Collections;
 
 namespace Nonno.Assets;
 
@@ -357,7 +358,7 @@ public static partial class Utils
     public static object CreateCapture(this PropertyInfo @this, object? target) => Activator.CreateInstance(typeof(PropertyCapture<>).MakeGenericType(@this.PropertyType), @this, target) ?? throw new Exception("指定されたコンストラクターが存在しない、予期しないエラーです。");
 
     public static readonly List<TypeInfo> ALL_TYPES = new(AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.DefinedTypes));
-    public static readonly Dictionary<Guid, TypeInfo> GUID_TYPE_DICTIONARY = new(ALL_TYPES.Select(x => new KeyValuePair<Guid, TypeInfo>(x.GUID, x)));
+    public static readonly TableConverter<Guid, Type> TYPE_IDENTIFIER_CONVERTER = new(AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetCustomAttributes<TypeIdentifierAttribute>().Select(x => x.ToKeyValuePair())));
 
     private static void InitReflection()
     {
@@ -366,7 +367,11 @@ public static partial class Utils
             foreach (var typeInfo in e.LoadedAssembly.DefinedTypes)
             {
                 ALL_TYPES.Add(typeInfo);
-                GUID_TYPE_DICTIONARY.Add(typeInfo.GUID, typeInfo);
+            }
+
+            foreach (var att in e.LoadedAssembly.GetCustomAttributes<TypeIdentifierAttribute>())
+            {
+                TYPE_IDENTIFIER_CONVERTER.Add(att.Identifier, att.Type);
             }
         };
     }
@@ -462,8 +467,6 @@ public static partial class Utils
             c = c.BaseType;
         } while (c is not null);
     }
-
-    public static Type GetType(Guid key) => GUID_TYPE_DICTIONARY[key];
 
     /// <summary>
     /// 型が待機可能である場合に、待機した戻り値を取得します。
@@ -1426,6 +1429,59 @@ $@"   [MethodImpl(MethodImplOptions.AggressiveInlining)]
             r_builder.Append(func(i));
         }
         return r_builder.ToString();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// 例えば<c>quotation</c>以下の文章はそれぞれ右のように変換されます。
+    /// <list type="table">
+    /// <listheader>
+    /// <term>元</term>
+    /// <description>果</description>
+    /// </listheader>
+    /// <item>
+    /// <term>Hello world!</term>
+    /// <description>"Hello world!"</description>
+    /// </item>
+    /// <item>
+    /// <term>Say,"Hello!"</term>
+    /// <description>'Say,"Hello!"'</description>
+    /// </item>
+    /// <item>
+    /// <term>Which quotation mark do you like, "" or ''?</term>
+    /// <description>'Which quotation mark do you like, "" or '"''?"</description>
+    /// <description>'Which quotation mark do you like, """" or ''?'</description>
+    /// </item>
+    /// <item>
+    /// <term>She said,"He won't like english style."</term>
+    /// <description>'She said,"He won't like english style."'</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    /// <param name="unescapedString"></param>
+    /// <param name="quotation1"></param>
+    /// <param name="quotation2"></param>
+    /// <param name="escapeSpace"></param>
+    /// <returns></returns>
+    public static string QuotationEscape(ReadOnlySpan<char> unescapedString, char quotation1 = '"', char quotation2 = '\'', bool escapeSpace = true)
+    {
+        for (int i = 0; i < unescapedString.Length; i++)
+        {
+            if (unescapedString[i] == quotation1 || IsSeparator(unescapedString[i]))
+            {
+                if ()
+            }
+            else if (unescapedString[i] == quotation2)
+            {
+
+            }
+        }
+    }
+    public static string QuotationUnescape(ReadOnlySpan<char> escapedString, char quotation1 = '"', char quotation2 = '\'')
+    {
+
     }
 
     #endregion
