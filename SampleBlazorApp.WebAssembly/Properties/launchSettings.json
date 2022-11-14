@@ -3,12 +3,13 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:13731/SampleBlazorApp",
+      "applicationUrl": "http://localhost:13731",
       "sslPort": 44319
     }
   },
   "profiles": {
     "SampleBlazorApp.WebAssembly": {
+      "commandLineArgs": "--pathbase=/SampleBlazorApp",
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
