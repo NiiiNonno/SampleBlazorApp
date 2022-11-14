@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assets.Graphics", "Assets\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assets.Scrolls", "Assets\Assets.Scrolls\Assets.Scrolls.csproj", "{7519F695-1B81-4121-9DED-2EB6E360EE71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBlazorApp.WebAssembly", "SampleBlazorApp.WebAssembly\SampleBlazorApp.WebAssembly.csproj", "{1EB50833-3616-4A5B-A73F-4CC54E41CDCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{7519F695-1B81-4121-9DED-2EB6E360EE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7519F695-1B81-4121-9DED-2EB6E360EE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7519F695-1B81-4121-9DED-2EB6E360EE71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EB50833-3616-4A5B-A73F-4CC54E41CDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EB50833-3616-4A5B-A73F-4CC54E41CDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EB50833-3616-4A5B-A73F-4CC54E41CDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EB50833-3616-4A5B-A73F-4CC54E41CDCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

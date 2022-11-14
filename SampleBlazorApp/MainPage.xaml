@@ -10,7 +10,6 @@
     </ContentPage.BindingContext>
 
     <Grid>
-        
         <Grid.RowDefinitions>
             <RowDefinition Height="26" />
             <RowDefinition Height="*" />
