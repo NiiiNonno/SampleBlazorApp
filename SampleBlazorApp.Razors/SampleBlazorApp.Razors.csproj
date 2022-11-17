@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assets\Assets.Collections\Assets.Collections.csproj" />
+    <ProjectReference Include="..\Assets\Assets.Scrolls\Assets.Scrolls.csproj" />
+    <ProjectReference Include="..\Assets\Assets\Assets.csproj" />
+  </ItemGroup>
+
+</Project>

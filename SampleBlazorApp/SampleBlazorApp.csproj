@@ -53,6 +53,7 @@
       <ProjectReference Include="..\Assets\Assets.Collections\Assets.Collections.csproj" />
       <ProjectReference Include="..\Assets\Assets.Graphics\Assets.Graphics.csproj" />
       <ProjectReference Include="..\Assets\Assets\Assets.csproj" />
+      <ProjectReference Include="..\SampleBlazorApp.Razors\SampleBlazorApp.Razors.csproj" />
     </ItemGroup>
 
 </Project>

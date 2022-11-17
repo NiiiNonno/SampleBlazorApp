@@ -10,6 +10,7 @@
   "profiles": {
     "SampleBlazorApp.WebAssembly": {
       "commandLineArgs": "--pathbase=/SampleBlazorApp",
+      "launchUrl": "SampleBlazorApp",
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
